@@ -1,5 +1,5 @@
 import express from "express";
-import {USERS} from "../utils/data.js"
+import { USERS } from "../utils/data.js";
 import { sleepFn } from "../utils/sleep.js";
 
 const router = express.Router();
@@ -15,14 +15,14 @@ const parseQuery = (req) => {
 
 router.get("/", async (req, res) => {
   const { limit, skip, sleep } = parseQuery(req);
-  const slice = USERS.slice(skip, skip + limit);
+  const slice = await USERS.slice(skip, skip + limit);
   await sleepFn(sleep);
   res.json({ meta: { total: USERS.length, limit, skip }, data: slice });
 });
 
 router.get("/:id", async (req, res) => {
   const { sleep } = parseQuery(req);
-  const item = USERS.find(
+  const item = await USERS.find(
     (p) => p.id == req.params.id || p.uuid == req.params.id
   );
   await sleepFn(sleep);
